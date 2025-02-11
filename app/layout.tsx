@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Туркменгаз Новости',
-  description: 'Агрегатор новостей Туркменгаз - последние новости и обновления',
-  keywords: 'Туркменгаз, новости, Туркменистан, газовая промышленность',
+  title: 'Новостной портал',
+  description: 'Агрегатор новостей - последние новости и обновления',
+  keywords: 'новости, промышленность, анализ',
 }
 
 export default function RootLayout({

@@ -1,5 +1,4 @@
 import Link from "next/link"
-import Image from "next/image"
 import { Button } from "@/components/Button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu } from "lucide-react"
@@ -10,14 +9,7 @@ export function SiteHeader() {
       <div className="container flex h-16 items-center">
         <div className="flex gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-2">
-            <Image
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/tkmgaz-removebg-preview-TrAJuIgbXhpss42k4Yu9bBVobY6cY3.png"
-              alt="Логотип Туркменгаз"
-              width={40}
-              height={40}
-              className="h-10 w-auto"
-            />
-            <span className="hidden font-bold sm:inline-block text-primary">Новости Туркменгаз</span>
+            <span className="font-bold sm:inline-block text-primary">Новостной портал</span>
           </Link>
           <nav className="hidden gap-6 md:flex">
             <Link
