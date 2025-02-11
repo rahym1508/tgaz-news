@@ -59,7 +59,7 @@ export function SiteHeader() {
               <div className="border-t px-6 py-4">
                 <div className="flex flex-col gap-2">
                   <Button 
-                    variant="outline" 
+                    variant="default" 
                     className="w-full justify-start" 
                     size="sm"
                   >
