@@ -36,13 +36,13 @@ export function NewsSection({ initialArticles }: NewsSectionProps) {
   }, [])
 
   return (
-    <section className="container py-12">
+    <section className="container px-4 md:px-6 py-6 md:py-12">
       <Alert className="mb-6 border-secondary/50 bg-secondary/10">
-        <AlertDescription className="text-secondary-foreground">
+        <AlertDescription className="text-secondary-foreground text-sm md:text-base">
           Этот сайт агрегирует новости из различных источников. Нажмите на статьи, чтобы прочитать полный текст.
         </AlertDescription>
       </Alert>
-      <div className="max-w-3xl mx-auto space-y-6">
+      <div className="max-w-3xl mx-auto space-y-4 md:space-y-6">
         {articles.map((article) => (
           <ArticleCard key={article.id} {...article} />
         ))}

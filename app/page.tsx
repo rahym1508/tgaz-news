@@ -3,8 +3,6 @@ import { HeroSection } from "@/components/hero-section"
 import { NewsSection } from "@/components/news-section"
 import Link from "next/link"
 import { getNews } from "@/lib/getNews"
-import { Suspense } from "react"
-import { LoadingSpinner } from "@/components/loading-spinner"
 
 // Add revalidation
 export const revalidate = 0
@@ -17,26 +15,20 @@ export default async function Home() {
       <SiteHeader />
       <main className="flex-1">
         <HeroSection />
-        <Suspense fallback={<LoadingSpinner />}>
-          <NewsSection initialArticles={articles} />
-        </Suspense>
+        <NewsSection initialArticles={articles} />
       </main>
-      <footer className="border-t py-6 bg-primary/5">
-        <div className="container flex flex-col items-center justify-between gap-4 md:flex-row">
-          <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-            © 2024 Туркменгаз. Все права защищены. Новостной контент принадлежит соответствующим издателям.
-          </p>
-          <nav className="flex gap-4 text-sm text-muted-foreground">
-            <Link href="/about" className="hover:text-primary">
-              О нас
-            </Link>
-            <Link href="/contact" className="hover:text-primary">
-              Контакты
-            </Link>
-            <Link href="/privacy" className="hover:text-primary">
-              Конфиденциальность
-            </Link>
-          </nav>
+      <footer className="border-t py-4 md:py-6 bg-primary/5">
+        <div className="container px-4 md:px-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">
+            <p className="text-center text-xs md:text-sm text-muted-foreground">
+              © 2024 Туркменгаз. Все права защищены.
+            </p>
+            <nav className="flex flex-wrap justify-center gap-2 md:gap-4 text-xs md:text-sm text-muted-foreground">
+              <Link href="/about" className="hover:text-primary">О нас</Link>
+              <Link href="/contact" className="hover:text-primary">Контакты</Link>
+              <Link href="/privacy" className="hover:text-primary">Конфиденциальность</Link>
+            </nav>
+          </div>
         </div>
       </footer>
     </div>
