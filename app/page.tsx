@@ -6,6 +6,9 @@ import { getNews } from "@/lib/getNews"
 import { Suspense } from "react"
 import { LoadingSpinner } from "@/components/loading-spinner"
 
+// Add revalidation
+export const revalidate = 0
+
 export default async function Home() {
   const articles = await getNews()
 

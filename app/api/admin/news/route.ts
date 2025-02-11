@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { db } from "@/lib/db" // You'll need to set up a database
+import { revalidatePath } from "next/cache"
 
 export async function POST(request: Request) {
   try {
@@ -15,6 +16,9 @@ export async function POST(request: Request) {
         date: new Date().toISOString(),
       }
     })
+
+    // Revalidate the home page
+    revalidatePath('/')
 
     return NextResponse.json(news)
   } catch (error) {
