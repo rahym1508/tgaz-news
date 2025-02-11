@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import SimpleButton from "@/components/SimpleButton"
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet"
