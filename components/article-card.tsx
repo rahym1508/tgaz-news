@@ -1,11 +1,13 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
+import { ExternalLink } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import type { NewsArticle } from "@/types/news"
 
 type ArticleCardProps = NewsArticle
 
-export function ArticleCard({ title, content, source, date, url = "#", imageUrl }: ArticleCardProps) {
+export function ArticleCard({ title, content, source, sourceUrl, date, url = "#", imageUrl }: ArticleCardProps) {
   return (
     <Card className="group cursor-pointer transition-shadow hover:shadow-lg overflow-hidden">
       <Link href={url || "#"} className="flex flex-col md:flex-row gap-4 p-4">
@@ -26,10 +28,26 @@ export function ArticleCard({ title, content, source, date, url = "#", imageUrl 
           <p className="text-sm text-muted-foreground mt-2 line-clamp-3 md:line-clamp-2">
             {content}
           </p>
-          <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-            <span className="font-medium">{source}</span>
-            <span>•</span>
-            <span>{date}</span>
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+              <span className="font-medium">{source}</span>
+              <span>•</span>
+              <span>{date}</span>
+            </div>
+            {sourceUrl && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="ml-auto"
+                onClick={(e) => {
+                  e.preventDefault()
+                  window.open(sourceUrl, '_blank')
+                }}
+              >
+                <ExternalLink className="h-4 w-4 mr-2" />
+                Источник
+              </Button>
+            )}
           </div>
         </CardContent>
       </Link>
