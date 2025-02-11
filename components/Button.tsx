@@ -2,7 +2,7 @@ import type React from "react"
 import { cn } from "@/lib/utils"
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "default" | "ghost"
+  variant?: "default" | "ghost" | "outline"
   size?: "sm" | "md" | "lg"
 }
 
@@ -16,6 +16,7 @@ export const Button = ({ variant = "default", size = "md", className, children, 
   const variantClasses = {
     default: "bg-primary text-primary-foreground hover:bg-primary/90",
     ghost: "text-primary hover:bg-primary/10",
+    outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground"
   }
 
   return (

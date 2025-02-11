@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Button } from "@/components/Button"
+import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet"
 import { Menu, X } from "lucide-react"
 
@@ -58,10 +58,17 @@ export function SiteHeader() {
               </nav>
               <div className="border-t px-6 py-4">
                 <div className="flex flex-col gap-2">
-                  <Button variant="outline" className="w-full justify-start" size="sm">
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start" 
+                    size="sm"
+                  >
                     Войти
                   </Button>
-                  <Button className="w-full justify-start" size="sm">
+                  <Button 
+                    className="w-full justify-start" 
+                    size="sm"
+                  >
                     Подписаться
                   </Button>
                 </div>
