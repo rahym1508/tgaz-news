@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -11,18 +11,25 @@ export function NewsForm() {
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [editingNews, setEditingNews] = useState<NewsArticle | null>(null)
+  const formRef = useRef<HTMLFormElement>(null)
 
   useEffect(() => {
     const handleEdit = (event: CustomEvent<NewsArticle>) => {
       setEditingNews(event.detail)
       // Fill the form with article data
-      const form = document.querySelector('form') as HTMLFormElement
-      if (form) {
-        form.title.value = event.detail.title
-        form.content.value = event.detail.content
-        form.source.value = event.detail.source
-        form.sourceUrl.value = event.detail.sourceUrl || ''
-        form.imageUrl.value = event.detail.imageUrl || ''
+      if (formRef.current) {
+        const form = formRef.current
+        const titleInput = form.querySelector('[name="title"]') as HTMLInputElement
+        const contentInput = form.querySelector('[name="content"]') as HTMLTextAreaElement
+        const sourceInput = form.querySelector('[name="source"]') as HTMLInputElement
+        const sourceUrlInput = form.querySelector('[name="sourceUrl"]') as HTMLInputElement
+        const imageUrlInput = form.querySelector('[name="imageUrl"]') as HTMLInputElement
+
+        if (titleInput) titleInput.value = event.detail.title
+        if (contentInput) contentInput.value = event.detail.content
+        if (sourceInput) sourceInput.value = event.detail.source
+        if (sourceUrlInput) sourceUrlInput.value = event.detail.sourceUrl || ''
+        if (imageUrlInput) imageUrlInput.value = event.detail.imageUrl || ''
       }
     }
 
@@ -61,10 +68,8 @@ export function NewsForm() {
         description: editingNews ? "Новость обновлена" : "Новость создана",
       })
       
-      // Dispatch event to refresh news list
       window.dispatchEvent(new Event(editingNews ? 'news-updated' : 'news-created'))
       
-      // Reset form and editing state
       event.currentTarget.reset()
       setEditingNews(null)
     } catch (error) {
@@ -79,7 +84,7 @@ export function NewsForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
+    <form ref={formRef} onSubmit={onSubmit} className="space-y-4">
       <div>
         <h3 className="text-lg font-medium">
           {editingNews ? "Редактировать новость" : "Создать новость"}
@@ -119,7 +124,7 @@ export function NewsForm() {
             variant="outline"
             onClick={() => {
               setEditingNews(null)
-              event?.currentTarget.form?.reset()
+              formRef.current?.reset()
             }}
           >
             Отменить
