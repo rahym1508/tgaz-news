@@ -5,18 +5,22 @@ import type { NewsArticle } from "@/types/news"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { LoadingSpinner } from "@/components/loading-spinner"
+import { Pencil, Trash2 } from "lucide-react"
 
 export function NewsList() {
   const [news, setNews] = useState<NewsArticle[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [editingNews, setEditingNews] = useState<NewsArticle | null>(null)
   const { toast } = useToast()
 
   useEffect(() => {
     fetchNews()
-    
-    // Listen for news updates
     window.addEventListener('news-created', fetchNews)
-    return () => window.removeEventListener('news-created', fetchNews)
+    window.addEventListener('news-updated', fetchNews)
+    return () => {
+      window.removeEventListener('news-created', fetchNews)
+      window.removeEventListener('news-updated', fetchNews)
+    }
   }, [])
 
   async function fetchNews() {
@@ -48,7 +52,7 @@ export function NewsList() {
         description: "Новость удалена",
       })
       
-      fetchNews() // Refresh the list
+      fetchNews()
     } catch (error) {
       toast({
         title: "Ошибка",
@@ -56,6 +60,11 @@ export function NewsList() {
         variant: "destructive",
       })
     }
+  }
+
+  function handleEdit(article: NewsArticle) {
+    setEditingNews(article)
+    window.dispatchEvent(new CustomEvent('edit-news', { detail: article }))
   }
 
   if (isLoading) return <LoadingSpinner />
@@ -77,8 +86,17 @@ export function NewsList() {
               <Button 
                 variant="outline" 
                 size="sm"
+                onClick={() => handleEdit(article)}
+              >
+                <Pencil className="h-4 w-4 mr-2" />
+                Изменить
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
                 onClick={() => deleteNews(article.id)}
               >
+                <Trash2 className="h-4 w-4 mr-2" />
                 Удалить
               </Button>
             </div>
