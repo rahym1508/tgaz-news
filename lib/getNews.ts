@@ -6,9 +6,10 @@ export async function getNews(): Promise<NewsArticle[]> {
     const news = await db.news.findMany({
       orderBy: { date: 'desc' },
       take: 20,
+      cacheStrategy: 'none'
     })
 
-    if (!news) {
+    if (!news?.length) {
       console.error('No news found')
       return []
     }

@@ -37,11 +37,19 @@ export async function GET() {
       take: 20,
     })
     
-    return NextResponse.json(news.map(article => ({
-      ...article,
-      date: article.date.toLocaleDateString("ru-RU"),
-      url: `/news/${article.id}`
-    })))
+    return NextResponse.json(
+      news.map(article => ({
+        ...article,
+        date: article.date.toLocaleDateString("ru-RU"),
+        url: `/news/${article.id}`
+      })),
+      {
+        headers: {
+          'Cache-Control': 'no-store, must-revalidate',
+          'Pragma': 'no-cache'
+        }
+      }
+    )
   } catch (error) {
     console.error("Error fetching news:", error)
     return NextResponse.json(
