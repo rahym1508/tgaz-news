@@ -5,10 +5,10 @@ import type { NewsArticle } from "@/types/news"
 
 type ArticleCardProps = NewsArticle
 
-export function ArticleCard({ title, content, source, date, url, imageUrl }: ArticleCardProps) {
+export function ArticleCard({ title, content, source, date, url = "#", imageUrl }: ArticleCardProps) {
   return (
     <Card className="group cursor-pointer transition-shadow hover:shadow-lg overflow-hidden">
-      <Link href={url} className="flex gap-6 p-4">
+      <Link href={url || "#"} className="flex gap-6 p-4">
         {imageUrl && (
           <div className="relative w-[200px] h-[140px] flex-shrink-0">
             <Image
