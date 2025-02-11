@@ -5,8 +5,7 @@ export async function getNews(): Promise<NewsArticle[]> {
   try {
     const news = await db.news.findMany({
       orderBy: { date: 'desc' },
-      take: 20,
-      cacheStrategy: 'none'
+      take: 20
     })
 
     if (!news?.length) {
