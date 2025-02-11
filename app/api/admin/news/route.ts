@@ -10,6 +10,7 @@ export async function POST(request: Request) {
         title: body.title,
         content: body.content,
         source: body.source,
+        sourceUrl: body.sourceUrl,
         imageUrl: body.imageUrl,
         date: new Date().toISOString(),
       }
@@ -19,7 +20,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Error creating news:", error)
     return NextResponse.json(
-      { error: "Failed to create news" },
+      { error: "Failed to create news", details: error },
       { status: 500 }
     )
   }
@@ -28,20 +29,19 @@ export async function POST(request: Request) {
 export async function GET() {
   try {
     const news = await db.news.findMany({
-      orderBy: { date: 'desc' }
+      orderBy: { date: 'desc' },
+      take: 20,
     })
     
-    const formattedNews = news.map(article => ({
+    return NextResponse.json(news.map(article => ({
       ...article,
       date: article.date.toLocaleDateString("ru-RU"),
       url: `/news/${article.id}`
-    }))
-    
-    return NextResponse.json(formattedNews)
+    })))
   } catch (error) {
     console.error("Error fetching news:", error)
     return NextResponse.json(
-      { error: "Failed to fetch news" },
+      { error: "Failed to fetch news", details: error },
       { status: 500 }
     )
   }
