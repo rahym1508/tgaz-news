@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import SimpleButton from "@/components/SimpleButton"
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet"
 import { Menu, X } from "lucide-react"
 
@@ -58,19 +58,19 @@ export function SiteHeader() {
               </nav>
               <div className="border-t px-6 py-4">
                 <div className="flex flex-col gap-2">
-                  <Button 
+                  <SimpleButton 
                     variant="default" 
                     className="w-full justify-start" 
                     size="sm"
                   >
                     Войти
-                  </Button>
-                  <Button 
+                  </SimpleButton>
+                  <SimpleButton 
                     className="w-full justify-start" 
                     size="sm"
                   >
                     Подписаться
-                  </Button>
+                  </SimpleButton>
                 </div>
               </div>
             </div>
@@ -113,19 +113,19 @@ export function SiteHeader() {
 
         {/* Desktop Buttons */}
         <div className="hidden md:flex items-center gap-2">
-          <Button variant="ghost" size="sm">
+          <SimpleButton variant="ghost" size="sm">
             Войти
-          </Button>
-          <Button size="sm">
+          </SimpleButton>
+          <SimpleButton size="sm">
             Подписаться
-          </Button>
+          </SimpleButton>
         </div>
 
         {/* Mobile Buttons */}
         <div className="md:hidden">
-          <Button size="sm">
+          <SimpleButton size="sm">
             Войти
-          </Button>
+          </SimpleButton>
         </div>
       </div>
     </header>
