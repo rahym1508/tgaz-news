@@ -8,13 +8,57 @@ datasource db {
 }
 
 model News {
-  id        String   @id @default(cuid())
-  title     String
-  content   String   @db.Text
-  source    String
-  sourceUrl String?  @db.Text
-  imageUrl  String?  // Optional image URL
-  date      DateTime @default(now())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  content     String    @db.Text
+  excerpt     String?   @db.Text
+  source      String
+  sourceUrl   String?   @db.Text
+  imageUrl    String?
+  status      String    @default("published") // draft, published
+  publishedAt DateTime?
+  featured    Boolean   @default(false)
+  views       Int       @default(0)
+  categories  Category[]
+  tags        Tag[]
+  author      User?     @relation(fields: [authorId], references: [id])
+  authorId    String?
+  // SEO fields
+  metaTitle   String?
+  metaDesc    String?
+  // Timestamps
+  date        DateTime  @default(now())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  news        News[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Tag {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  news        News[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model User {
+  id          String    @id @default(cuid())
+  name        String
+  email       String    @unique
+  password    String
+  role        String    @default("editor") // admin, editor
+  news        News[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
