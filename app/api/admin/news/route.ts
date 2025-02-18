@@ -3,11 +3,11 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import slugify from "slugify";
 import { getServerSession } from "next-auth";
-import { authConfig } from "@/lib/auth";
+import { authOptions } from "@/lib/auth";
 
 export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -62,7 +62,7 @@ export async function POST(request: Request) {
 
 export async function GET() {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
