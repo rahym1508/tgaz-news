@@ -2,11 +2,12 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import slugify from "slugify";
-import { auth } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/lib/auth";
 
 export async function POST(request: Request) {
   try {
-    const session = await auth();
+    const session = await getServerSession(authConfig);
     if (!session?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -48,14 +49,12 @@ export async function POST(request: Request) {
       },
     });
 
-    // Revalidate the home page
     revalidatePath("/");
-
     return NextResponse.json(news);
   } catch (error) {
     console.error("Error creating news:", error);
     return NextResponse.json(
-      { error: "Failed to create news", details: error },
+      { error: "Failed to create news article" },
       { status: 500 }
     );
   }
@@ -63,9 +62,12 @@ export async function POST(request: Request) {
 
 export async function GET() {
   try {
+    const session = await getServerSession(authConfig);
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const news = await prisma.news.findMany({
-      orderBy: { date: "desc" },
-      take: 20,
       include: {
         categories: true,
         tags: true,
@@ -77,23 +79,15 @@ export async function GET() {
           },
         },
       },
+      orderBy: { date: "desc" },
     });
 
-    return NextResponse.json(
-      news.map((article) => ({
-        ...article,
-        date: new Date(article.date).toLocaleDateString("ru-RU"),
-        url: `/news/${article.id}`,
-      })),
-      {
-        headers: {
-          "Cache-Control": "no-store, must-revalidate",
-          Pragma: "no-cache",
-        },
-      }
-    );
+    return NextResponse.json(news);
   } catch (error) {
     console.error("Error fetching news:", error);
-    return NextResponse.json({ error: "Failed to fetch news" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch news articles" },
+      { status: 500 }
+    );
   }
 }
