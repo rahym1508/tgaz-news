@@ -13,7 +13,29 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
+    console.log("Creating news with data:", body);
+
+    if (!body.title || !body.content || !body.source) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
     const slug = slugify(body.title, { lower: true, strict: true });
+
+    // Check if user exists
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+    });
+
+    if (!user) {
+      console.error("User not found:", session.user.id);
+      return NextResponse.json(
+        { error: "User not found" },
+        { status: 404 }
+      );
+    }
 
     const news = await prisma.news.create({
       data: {
@@ -21,11 +43,13 @@ export async function POST(request: Request) {
         slug,
         content: body.content,
         source: body.source,
-        sourceUrl: body.sourceUrl,
-        imageUrl: body.imageUrl,
+        sourceUrl: body.sourceUrl || null,
+        imageUrl: body.imageUrl || null,
         status: body.status || "draft",
         publishedAt: body.status === "published" ? new Date() : null,
-        authorId: session.user.id,
+        author: {
+          connect: { id: user.id }
+        },
         categories: body.categories ? {
           connect: body.categories.map((id: string) => ({ id }))
         } : undefined,
@@ -48,12 +72,13 @@ export async function POST(request: Request) {
       },
     });
 
+    console.log("News created successfully:", news);
     revalidatePath("/");
     return NextResponse.json(news);
   } catch (error) {
-    console.error("Error creating news:", error);
+    console.error("Detailed error creating news:", error);
     return NextResponse.json(
-      { error: "Failed to create news article" },
+      { error: "Failed to create news article", details: error },
       { status: 500 }
     );
   }

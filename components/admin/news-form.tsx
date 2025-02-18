@@ -6,16 +6,19 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import type { NewsArticle } from "@/types/news"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export function NewsForm() {
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [editingNews, setEditingNews] = useState<NewsArticle | null>(null)
+  const [status, setStatus] = useState<"draft" | "published">("draft")
   const formRef = useRef<HTMLFormElement>(null)
 
   useEffect(() => {
     const handleEdit = (event: CustomEvent<NewsArticle>) => {
       setEditingNews(event.detail)
+      setStatus(event.detail.status)
       // Fill the form with article data
       if (formRef.current) {
         const form = formRef.current
@@ -55,6 +58,7 @@ export function NewsForm() {
           source: formData.get('source'),
           sourceUrl: formData.get('sourceUrl'),
           imageUrl: formData.get('imageUrl') || null,
+          status: status,
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -72,6 +76,7 @@ export function NewsForm() {
       
       event.currentTarget.reset()
       setEditingNews(null)
+      setStatus("draft")
     } catch (error) {
       toast({
         title: "Ошибка",
@@ -105,14 +110,25 @@ export function NewsForm() {
         <Input 
           name="sourceUrl" 
           type="url" 
-          placeholder="URL источника" 
-          required 
+          placeholder="URL источника (необязательно)" 
         />
         <Input 
           name="imageUrl" 
           type="url" 
           placeholder="URL изображения (необязательно)" 
         />
+        <Select 
+          value={status} 
+          onValueChange={(value: "draft" | "published") => setStatus(value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Выберите статус" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="draft">Черновик</SelectItem>
+            <SelectItem value="published">Опубликовано</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="flex gap-2">
         <Button type="submit" disabled={isLoading}>
@@ -125,6 +141,7 @@ export function NewsForm() {
             onClick={() => {
               setEditingNews(null)
               formRef.current?.reset()
+              setStatus("draft")
             }}
           >
             Отменить
