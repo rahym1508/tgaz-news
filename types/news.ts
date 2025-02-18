@@ -7,4 +7,5 @@ export interface NewsArticle {
   imageUrl?: string
   publishedAt?: string | Date | null
   url?: string
+  status: "draft" | "published"
 }
