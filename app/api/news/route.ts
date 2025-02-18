@@ -21,8 +21,18 @@ export async function GET(request: Request) {
       ...(tag && { tags: { some: { slug: tag } } }),
       ...(search && {
         OR: [
-          { title: { contains: search, mode: "insensitive" } },
-          { content: { contains: search, mode: "insensitive" } },
+          {
+            title: {
+              contains: search,
+              mode: "insensitive" as const,
+            },
+          },
+          {
+            content: {
+              contains: search,
+              mode: "insensitive" as const,
+            },
+          },
         ],
       }),
     };
