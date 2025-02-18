@@ -6,6 +6,18 @@ export async function getNews(): Promise<NewsArticle[]> {
   try {
     const news = await db.news.findMany({
       orderBy: { publishedAt: 'desc' },
+      where: {
+        status: 'published',
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
       take: 20
     })
 
@@ -19,8 +31,15 @@ export async function getNews(): Promise<NewsArticle[]> {
       title: article.title,
       content: article.content,
       source: article.source,
-      imageUrl: article.imageUrl || undefined,
+      sourceUrl: article.sourceUrl,
+      imageUrl: article.imageUrl,
+      status: article.status,
       publishedAt: formatDate(article.publishedAt),
+      authorId: article.authorId,
+      author: article.author,
+      slug: article.slug,
+      createdAt: article.createdAt,
+      updatedAt: article.updatedAt,
       url: `/news/${article.id}`
     }))
   } catch (error) {
