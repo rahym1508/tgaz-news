@@ -21,7 +21,7 @@ export default async function NewsPage({ params }: { params: { id: string } }) {
           <h1 className="text-4xl font-bold tracking-tight">{news.title}</h1>
           <div className="mt-4 flex gap-4 text-sm text-muted-foreground">
             <span>{news.source}</span>
-            <span>{formatDate(news.date)}</span>
+            <span>{news.publishedAt ? formatDate(news.publishedAt) : 'No date'}</span>
           </div>
           {news.imageUrl && (
             <div className="relative w-full h-[400px] my-8">
