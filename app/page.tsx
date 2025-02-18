@@ -51,7 +51,11 @@ export default async function Home() {
                     {article.excerpt || article.content.slice(0, 150)}...
                   </p>
                   <div className="flex items-center justify-between text-sm text-gray-500">
-                    <span>{new Date(article.publishedAt).toLocaleDateString("ru-RU")}</span>
+                    <span>
+                      {article.publishedAt 
+                        ? new Date(article.publishedAt).toLocaleDateString("ru-RU")
+                        : "No date"}
+                    </span>
                     <a
                       href={`/news/${article.id}`}
                       className="text-blue-500 hover:text-blue-700"
