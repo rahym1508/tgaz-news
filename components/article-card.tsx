@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import type { NewsArticle } from "@/types/news"
+import { formatDate } from "@/lib/utils"
 
 type ArticleCardProps = NewsArticle
 
@@ -32,7 +33,7 @@ export function ArticleCard({ title, content, source, sourceUrl, publishedAt, ur
             <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
               <span className="font-medium">{source}</span>
               <span>•</span>
-              <span>{publishedAt}</span>
+              <span>{typeof publishedAt === 'string' ? publishedAt : publishedAt ? formatDate(publishedAt) : 'No date'}</span>
             </div>
             {sourceUrl && (
               <Button 
