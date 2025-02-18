@@ -1,4 +1,5 @@
 import { db } from "@/lib/db"
+import { formatDate } from "@/lib/utils"
 import type { NewsArticle } from "@/types/news"
 
 export async function getNews(): Promise<NewsArticle[]> {
@@ -19,7 +20,7 @@ export async function getNews(): Promise<NewsArticle[]> {
       content: article.content,
       source: article.source,
       imageUrl: article.imageUrl || undefined,
-      date: article.publishedAt ? new Date(article.publishedAt).toLocaleDateString("ru-RU") : 'No date',
+      publishedAt: formatDate(article.publishedAt),
       url: `/news/${article.id}`
     }))
   } catch (error) {

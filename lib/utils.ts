@@ -39,11 +39,11 @@ export function isApiError(error: unknown): error is {
   )
 }
 
-export function formatDate(date: string | Date, locale = 'ru-RU'): string {
+export function formatDate(date: string | Date | null | undefined, locale = 'ru-RU'): string {
+  if (!date) return 'No date'
   return new Date(date).toLocaleDateString(locale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
   })
 }
-

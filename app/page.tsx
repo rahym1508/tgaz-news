@@ -3,6 +3,7 @@ import { HeroSection } from "@/components/hero-section"
 import { NewsSection } from "@/components/news-section"
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
+import { formatDate } from "@/lib/utils"
 
 // Add revalidation
 export const revalidate = 0
@@ -72,9 +73,7 @@ export default async function Home() {
                     </p>
                     <div className="flex items-center justify-between text-sm text-gray-500">
                       <span>
-                        {article.publishedAt 
-                          ? new Date(article.publishedAt).toLocaleDateString("ru-RU")
-                          : "No date"}
+                        {formatDate(article.publishedAt)}
                       </span>
                       <a
                         href={`/news/${article.id}`}
