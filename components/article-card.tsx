@@ -7,7 +7,7 @@ import type { NewsArticle } from "@/types/news"
 
 type ArticleCardProps = NewsArticle
 
-export function ArticleCard({ title, content, source, sourceUrl, date, url = "#", imageUrl }: ArticleCardProps) {
+export function ArticleCard({ title, content, source, sourceUrl, publishedAt, url = "#", imageUrl }: ArticleCardProps) {
   return (
     <Card className="group cursor-pointer transition-shadow hover:shadow-lg overflow-hidden">
       <Link href={url || "#"} className="flex flex-col md:flex-row gap-4 p-4">
@@ -32,7 +32,7 @@ export function ArticleCard({ title, content, source, sourceUrl, date, url = "#"
             <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
               <span className="font-medium">{source}</span>
               <span>•</span>
-              <span>{date}</span>
+              <span>{publishedAt}</span>
             </div>
             {sourceUrl && (
               <Button 
@@ -54,4 +54,3 @@ export function ArticleCard({ title, content, source, sourceUrl, date, url = "#"
     </Card>
   )
 }
-

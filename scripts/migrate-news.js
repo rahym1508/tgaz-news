@@ -24,7 +24,7 @@ async function migrateNews() {
         data: {
           slug: slugify(article.title, { lower: true, strict: true }),
           status: "published",
-          publishedAt: article.date,
+          publishedAt: new Date(), // Set to current date since we can't access the old date field
           categories: {
             connect: { id: defaultCategory.id },
           },
