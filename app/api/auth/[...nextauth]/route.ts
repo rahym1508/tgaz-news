@@ -1,40 +1,70 @@
-import NextAuth from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
-import { db } from "@/lib/db"
-import bcrypt from "bcryptjs"
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { prisma } from "@/lib/prisma";
+import bcrypt from "bcryptjs";
 
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text" },
+        email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        if (!credentials?.username || !credentials?.password) {
-          return null
+        if (!credentials?.email || !credentials?.password) {
+          return null;
         }
 
-        // In production, replace with actual database query
-        if (
-          credentials.username === process.env.ADMIN_USERNAME &&
-          credentials.password === process.env.ADMIN_PASSWORD
-        ) {
-          return {
-            id: "1",
-            name: "Admin",
-            email: "admin@turkmengaz.com"
-          }
+        const user = await prisma.user.findUnique({
+          where: {
+            email: credentials.email,
+          },
+        });
+
+        if (!user) {
+          return null;
         }
 
-        return null
-      }
-    })
+        const isPasswordValid = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
+
+        if (!isPasswordValid) {
+          return null;
+        }
+
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        };
+      },
+    }),
   ],
-  pages: {
-    signIn: '/login',
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.role = user.role;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token && session.user) {
+        session.user.id = token.sub as string;
+        session.user.role = token.role as string;
+      }
+      return session;
+    },
   },
-})
+  pages: {
+    signIn: "/login",
+  },
+  session: {
+    strategy: "jwt",
+  },
+});
 
-export { handler as GET, handler as POST } 
+export { handler as GET, handler as POST };
