@@ -34,7 +34,6 @@ export async function POST(request: Request) {
         } : undefined,
         metaTitle: body.metaTitle,
         metaDesc: body.metaDesc,
-        date: new Date(),
       },
       include: {
         categories: true,
@@ -79,7 +78,7 @@ export async function GET() {
           },
         },
       },
-      orderBy: { date: "desc" },
+      orderBy: { publishedAt: "desc" },
     });
 
     return NextResponse.json(news);
