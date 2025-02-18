@@ -9,7 +9,7 @@ export const revalidate = 0
 
 export default async function Home() {
   const news = await prisma.news.findMany({
-    orderBy: { date: "desc" },
+    orderBy: { publishedAt: "desc" },
     take: 20,
     where: {
       status: "published",
@@ -17,6 +17,11 @@ export default async function Home() {
     include: {
       categories: true,
       tags: true,
+      author: {
+        select: {
+          name: true,
+        },
+      },
     },
   })
 
@@ -46,7 +51,7 @@ export default async function Home() {
                     {article.excerpt || article.content.slice(0, 150)}...
                   </p>
                   <div className="flex items-center justify-between text-sm text-gray-500">
-                    <span>{new Date(article.date).toLocaleDateString("ru-RU")}</span>
+                    <span>{new Date(article.publishedAt).toLocaleDateString("ru-RU")}</span>
                     <a
                       href={`/news/${article.id}`}
                       className="text-blue-500 hover:text-blue-700"
