@@ -17,7 +17,7 @@ model News {
   sourceUrl   String?   @db.Text
   imageUrl    String?
   status      String    @default("published") // draft, published
-  publishedAt DateTime?
+  publishedAt DateTime? @default(now())
   featured    Boolean   @default(false)
   views       Int       @default(0)
   categories  Category[]
@@ -28,7 +28,6 @@ model News {
   metaTitle   String?
   metaDesc    String?
   // Timestamps
-  date        DateTime  @default(now())
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
