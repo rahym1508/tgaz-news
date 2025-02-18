@@ -4,7 +4,7 @@ import type { NewsArticle } from "@/types/news"
 export async function getNews(): Promise<NewsArticle[]> {
   try {
     const news = await db.news.findMany({
-      orderBy: { date: 'desc' },
+      orderBy: { publishedAt: 'desc' },
       take: 20
     })
 
@@ -19,7 +19,7 @@ export async function getNews(): Promise<NewsArticle[]> {
       content: article.content,
       source: article.source,
       imageUrl: article.imageUrl || undefined,
-      date: new Date(article.date).toLocaleDateString("ru-RU"),
+      date: article.publishedAt ? new Date(article.publishedAt).toLocaleDateString("ru-RU") : 'No date',
       url: `/news/${article.id}`
     }))
   } catch (error) {
