@@ -33,7 +33,7 @@ export async function getNews(): Promise<NewsArticle[]> {
       source: article.source,
       sourceUrl: article.sourceUrl || undefined,
       imageUrl: article.imageUrl || undefined,
-      status: article.status,
+      status: article.status as "draft" | "published",
       publishedAt: formatDate(article.publishedAt),
       authorId: article.authorId,
       author: article.author,
